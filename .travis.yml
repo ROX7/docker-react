@@ -21,10 +21,13 @@ after_success:
   - docker push yanisble/fibo-worker
 
 deploy:
+  provider: elasticbeanstalk
   region: "us-east-1"
   app: fibo-docker
   env: Fibodocker-env
   bucket_name: elasticbeanstalk-us-east-1-248952594728
   bucket_path: fibo-docker
+  on:
+    branch: master
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
