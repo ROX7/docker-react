@@ -4,18 +4,18 @@ services:
   -docker
 
 before_install:
-  - docker build -t yanisble/docker-react:latest -f Dockerfile.dev .
+  -docker build -t yanisble/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true yanisble/docker-react npm run test
-deploy:
-  provider: elasticbeanstalk
-  region: "us-east-1"
-  app: "docker-react"
-  env: "Dockerreact-env"
-  bucket_name: "elasticbeanstalk-us-east-1-248952594728"
-  bucket_path: "docker-react"
-  on:
-    branch: master
-  access_key_id: "$AWS_ACCESS_KEY"
-  secret_access_key: "$AWS_SECRET_KEY"
+  - docker run -e CI=true yanisble/react-test npm test
+
+after_success:
+  - docker build -t yanisble/fibo-react ./client
+  - docker build -t yanisble/fibo-nginx ./nginx
+  - docker build -t yanisble/fibo-server ./server
+  - docker build -t yanisble/fibo-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push yanisble/fibo-react
+  - docker push yanisble/fibo-nginx
+  - docker push yanisble/fibo-server
+  - docker push yanisble/fibo-worker
