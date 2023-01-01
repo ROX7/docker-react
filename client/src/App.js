@@ -21,7 +21,7 @@ function App() {
             >
               Learn React
             </a>
-            <Link to="/">Home</Link>
+            <Link to="/">Home Page</Link>
             <Link to="/otherpage">Other Page</Link>
           </header>
           <div>
